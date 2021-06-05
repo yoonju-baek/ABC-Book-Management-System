@@ -2,6 +2,7 @@ package sait.bms.managers;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -19,7 +20,7 @@ import sait.bms.problemdomain.Periodical;
  * @author SeungJin Moon
  * @author Yoonju Baek
  * 
- * @version 3 June 2021
+ * @version 4 June 2021
  */
 public class Manager {
 	private ArrayList<Book> books = new ArrayList<>();
@@ -76,9 +77,25 @@ public class Manager {
 		}
 	}
 
-	private void save() {
-		// TODO Auto-generated method stub
-		System.out.println("TEST: Save ");
+	private void save() throws FileNotFoundException {
+		PrintStream output = new PrintStream(FILE_PATH);
+		for(Book book: books) {
+			if(book instanceof ChildrensBook) {
+				ChildrensBook childrensbook = (ChildrensBook)book;
+				output.println(childrensbook.getIsbn() + ";" + childrensbook.getCallNumber() + ";" + childrensbook.getAvailable() + ";" + childrensbook.getTotal() + ";" + childrensbook.getTitle() + ";" + childrensbook.getAuthors() + ";" + childrensbook.getFormat());
+			} else if (book instanceof Cookbook) {
+				Cookbook cookbook = (Cookbook)book;
+				output.println(cookbook.getIsbn() + ";" + cookbook.getCallNumber() + ";" + cookbook.getAvailable() + ";" + cookbook.getTotal() + ";" + cookbook.getTitle() + ";" + cookbook.getPublisher() + ";" + cookbook.getDiet());
+			} else if (book instanceof Paperback) {
+				Paperback paperback = (Paperback)book;
+				output.println(paperback.getIsbn() + ";" + paperback.getCallNumber() + ";" + paperback.getAvailable() + ";" + paperback.getTotal() + ";" + paperback.getTitle() + ";" + paperback.getAuthors() + ";" + paperback.getYear() + ";" + paperback.getGenre());
+			} else if (book instanceof Periodical) {
+				Periodical periodical = (Periodical)book;
+				output.println(periodical.getIsbn() + ";" + periodical.getCallNumber() + ";" + periodical.getAvailable() + ";" + periodical.getTotal() + ";" + periodical.getTitle() + ";" + periodical.getFrequency());
+			}
+			
+		}
+		output.close();
 	}
 
 	/**
@@ -168,10 +185,10 @@ public class Manager {
 			}
 			else if(book instanceof Cookbook && bookType == 2) {
 				Cookbook cookbook = (Cookbook)book;
-				// after bookbook object is created
-//				if(cookbook.getFormat() == category) {
+				if(cookbook.getDiet() == category) {
 					ismatch = true;
 					System.out.println(book);
+				}
 			}
 			else if(book instanceof Paperback && bookType == 3) {
 				Paperback paperback = (Paperback)book;
@@ -225,8 +242,42 @@ public class Manager {
 	}
 
 	private void checkout() {
-		// TODO Auto-generated method stub
-		System.out.println("TEST: Checkout ");
+		System.out.print("Enter ISBN of book: ");
+		String isbn = in.nextLine();
+
+		if (!isbnValidation(isbn)) {
+			System.out.println("Incorrect input. Try again.\n");
+			return;
+		}
+		
+		for (Book book : books) {
+			if (book.getIsbn() == Long.parseLong(isbn)) {
+				if (book.getAvailable() != 0) {
+					book.setAvailable(book.getAvailable() - 1);
+					System.out.println("The book \"" + book.getTitle() + "\" has been checked out.");
+					System.out.println("It can be located using a call number: " + book.getCallNumber());
+					return;
+				} else {
+					System.out.println("The book \"" + book.getTitle() + "\" is not available.");
+					return;
+				}
+			} 
+		}
+
+		System.out.println("Sorry, we can't find any matches for \"" + isbn + "\"\n");
+		return;
+	}
+
+	private boolean isbnValidation(String isbn) {
+		boolean isIsbn = true;
+
+		if (isbn.length() != 13) {
+			isIsbn = false;
+		} else {
+			isIsbn = isDigit(isbn);
+		}
+	
+		return isIsbn;
 	}
 
 	private void loadBookList() throws FileNotFoundException {
@@ -245,10 +296,9 @@ public class Manager {
 				break;
 			case '2':
 			case '3':
-				// After complete Cookbooks class, enable below code
-				// books.add(new Cookbooks(Long.parseLong(fields[0]), fields[1],
-				// Integer.parseInt(fields[2]), Integer.parseInt(fields[3]), fields[4],
-				// fields[5], fields[6].charAt(0)));
+				
+				books.add(new Cookbook(Long.parseLong(fields[0]), fields[1], Integer.parseInt(fields[2]), 
+				Integer.parseInt(fields[3]), fields[4],	fields[5], fields[6].charAt(0)));
 				break;
 			case '4':
 			case '5':

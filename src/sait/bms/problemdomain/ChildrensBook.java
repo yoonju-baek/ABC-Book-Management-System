@@ -6,17 +6,13 @@ public class ChildrensBook extends Book {
 	private static final String FORMAT_C = "Chapter Book";
 	
 	private String authors;
-	private String format;
+	private char format;
 
 	public ChildrensBook() {
 		super();
 	}
 
-	public ChildrensBook(long isbn, String callNumber, int available, int total, String title) {
-		super(isbn, callNumber, available, total, title);
-	}
-
-	public ChildrensBook(long isbn, String callNumber, int available, int total, String title, String authors, String format) {
+	public ChildrensBook(long isbn, String callNumber, int available, int total, String title, String authors, char format) {
 		super(isbn, callNumber, available, total, title);
 		this.authors = authors;
 		this.format = format;
@@ -30,24 +26,24 @@ public class ChildrensBook extends Book {
 		this.authors = authors;
 	}
 
-	public String getFormat() {
+	public char getFormat() {
 		return format;
 	}
 
-	public void setFormat(String format) {
+	public void setFormat(char format) {
 		this.format = format;
 	}
 	
 	public String displayFormat() {
 		String formatName = "";
 		switch (this.format) {
-		case "P":
+		case 'P':
 			formatName = FORMAT_P;
 			break;
-		case "E":
+		case 'E':
 			formatName = FORMAT_E;
 			break;
-		case "C":
+		case 'C':
 			formatName = FORMAT_C;
 			break;
 		}
