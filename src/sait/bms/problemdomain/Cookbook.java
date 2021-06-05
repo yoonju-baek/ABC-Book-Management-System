@@ -1,5 +1,14 @@
 package sait.bms.problemdomain;
 
+/**
+ * Class Cookbook used to create Cookbook objects.
+ * 
+ * @author Dongyeon Kim
+ * @author SeungJin Moon
+ * @author Yoonju Baek
+ * 
+ * @version 4 June 2021
+ */
 public class Cookbook extends Book{
 	private static final String DIET_D = "Diabetic";
 	private static final String DIET_G = "Gluten-free";
@@ -10,28 +19,66 @@ public class Cookbook extends Book{
 	private String publisher;
 	private char diet;
 	
+	/**
+	 * Constructor used to create Cookbook Object.
+	 */
 	public Cookbook() {
 		super();
 	}
 
+	/**
+	 * Constructor used to create Cookbook Object providing the isbn, call number, available, total, title, publisher, and diet.
+	 * 
+	 * @param isbn International Standard Book Number
+	 * @param callNumber call number of book
+	 * @param available the number of available
+	 * @param total the number of total
+	 * @param title title
+	 * @param publisher publisher of book
+	 * @param diet	diet type of book
+	 */
 	public Cookbook(long isbn, String callNumber, int available, int total, String title, String publisher, char diet) {
 		super(isbn, callNumber, available, total, title);
 		this.publisher = publisher;
 		this.diet = diet;
 	}
+	
+	/**
+	 * Get the publisher
+	 * @return publisher
+	 */
 	public String getPublisher() {
 		return publisher;
 	}
+	
+	/**
+	 * Set the publisher
+	 * @param publisher
+	 */
 	public void setPublisher(String publisher) {
 		this.publisher = publisher;
 	}
+	
+	/**
+	 * Get the diet of book
+	 * @return the diet of book
+	 */
 	public char getDiet() {
 		return diet;
 	}
+	
+	/**
+	 * Set the diet of book
+	 * @param diet the diet of book
+	 */
 	public void setDiet(char diet) {
 		this.diet = diet;
 	}
 	
+	/**
+	 * Get the description of the diet
+	 * @return the description of the diet
+	 */
 	public String displayDiet() {
 		String dietName = "";
 		switch (this.diet) {
@@ -55,7 +102,6 @@ public class Cookbook extends Book{
 		return dietName;
 	}
 
-	
 	@Override
 	public String toString() {
 		return String.format("%-18s" + getIsbn()

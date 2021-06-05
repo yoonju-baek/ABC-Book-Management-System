@@ -77,6 +77,11 @@ public class Manager {
 		}
 	}
 
+	/**
+	 * Save data in the ArrayList to books.txt file
+	 * 
+	 * @throws FileNotFoundException if there are any problems opening file.
+	 */
 	private void save() throws FileNotFoundException {
 		PrintStream output = new PrintStream(FILE_PATH);
 		for(Book book: books) {
@@ -241,6 +246,9 @@ public class Manager {
 		}
 	}
 
+	/**
+	 * Checkout a book and decrement the available number of book.
+	 */
 	private void checkout() {
 		System.out.print("Enter ISBN of book: ");
 		String isbn = in.nextLine();
@@ -255,10 +263,10 @@ public class Manager {
 				if (book.getAvailable() != 0) {
 					book.setAvailable(book.getAvailable() - 1);
 					System.out.println("The book \"" + book.getTitle() + "\" has been checked out.");
-					System.out.println("It can be located using a call number: " + book.getCallNumber());
+					System.out.println("It can be located using a call number: " + book.getCallNumber() + "\n");
 					return;
 				} else {
-					System.out.println("The book \"" + book.getTitle() + "\" is not available.");
+					System.out.println("The book \"" + book.getTitle() + "\" is not available.\n");
 					return;
 				}
 			} 
@@ -268,6 +276,12 @@ public class Manager {
 		return;
 	}
 
+	/**
+	 * Validate the ISBN number is a digit and the length is 13.
+	 * 
+	 * @param isbn International Standard Book Number
+	 * @return is Digit or not
+	 */
 	private boolean isbnValidation(String isbn) {
 		boolean isIsbn = true;
 
@@ -276,10 +290,14 @@ public class Manager {
 		} else {
 			isIsbn = isDigit(isbn);
 		}
-	
 		return isIsbn;
 	}
 
+	/** 
+	 * Load book lists from books.txt file
+	 * 
+	 * @throws FileNotFoundException if there are any problems opening file.
+	 */
 	private void loadBookList() throws FileNotFoundException {
 		in = new Scanner(new File(FILE_PATH));
 
@@ -296,7 +314,6 @@ public class Manager {
 				break;
 			case '2':
 			case '3':
-				
 				books.add(new Cookbook(Long.parseLong(fields[0]), fields[1], Integer.parseInt(fields[2]), 
 				Integer.parseInt(fields[3]), fields[4],	fields[5], fields[6].charAt(0)));
 				break;
