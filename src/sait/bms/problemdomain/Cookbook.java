@@ -112,7 +112,7 @@ public class Cookbook extends Book{
 				 		 + "%n%-18s" + publisher
 				 		 + "%n%-18s" + displayDiet() 
 				 		 + "%n",
-				 		 "ISBN:", "Call Number:","Available:", "Total:","Title:","Publisher:");
+				 		 "ISBN:", "Call Number:","Available:", "Total:","Title:","Publisher:","Diet:" );
 	}
 	
 	
