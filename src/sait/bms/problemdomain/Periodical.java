@@ -3,8 +3,11 @@ package sait.bms.problemdomain;
 /**
  * Class Periodical used to create Periodical objects
  * 
- * @author Group7 (Dongyeon Kim, SeungJin Moon, Yoonju Baek)
- * @version 3 June 2021
+ * @author Dongyeon Kim
+ * @author SeungJin Moon
+ * @author Yoonju Baek
+ * 
+ * @version 4 June 2021
  */
 public class Periodical extends Book{
 	private static final String FREQUENCY_D = "Daily";

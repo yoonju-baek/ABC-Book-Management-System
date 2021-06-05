@@ -1,9 +1,13 @@
 package sait.bms.problemdomain;
+
 /**
  * Class Paperback used to create Paperback objects.
  * 
- * @author Group7 (Dongyeon Kim, SeungJin Moon, Yoonju Baek)
- * @version 3 June 2021
+ * @author Dongyeon Kim
+ * @author SeungJin Moon
+ * @author Yoonju Baek
+ * 
+ * @version 4 June 2021
  */
 public class Paperback extends Book {
 	private static final String GENRE_A = "Adventure";
