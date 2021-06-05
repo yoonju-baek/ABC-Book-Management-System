@@ -9,16 +9,28 @@ import java.util.Scanner;
 import sait.bms.problemdomain.Book;
 import sait.bms.problemdomain.ChildrensBook;
 import sait.bms.problemdomain.Cookbook;
-//After completing the following class, enable them
-//import sait.bms.problemdomain.Cookbooks;
 import sait.bms.problemdomain.Paperback;
 import sait.bms.problemdomain.Periodical;
 
+/**
+ * Manager class to display the following:
+ * 
+ * @author Dongyeon Kim
+ * @author SeungJin Moon
+ * @author Yoonju Baek
+ * 
+ * @version 3 June 2021
+ */
 public class Manager {
 	private ArrayList<Book> books = new ArrayList<>();
 	private static final String FILE_PATH = "res/books.txt";
 	Scanner in;
 
+	/**
+	 * Create a Manager object.
+	 * 
+	 * @throws FileNotFoundException if there are any problems opening file.
+	 */
 	public Manager() throws FileNotFoundException {
 		loadBookList();
 
@@ -32,8 +44,12 @@ public class Manager {
 			System.out.print("\rEnter option: ");
 
 			in = new Scanner(System.in);
-			int menuNumber = in.nextInt();
-			String temp = in.nextLine();
+			String userInput = in.nextLine().trim();
+			
+			int menuNumber = 0;
+			if(isDigit(userInput)) {
+				menuNumber = Integer.parseInt(userInput);
+			}
 
 			switch (menuNumber) {
 			case 1:
@@ -65,9 +81,21 @@ public class Manager {
 		System.out.println("TEST: Save ");
 	}
 
+	/**
+	 * Produce the random Book lists as many as the user wants
+	 */
 	private void produceRandomBooks() {
 		System.out.print("Enter number of books: ");
-		int randomBooksNum = in.nextInt();
+		String userInput = in.nextLine().trim();
+		
+		int randomBooksNum = 0;
+		if(isDigit(userInput)) {
+			randomBooksNum = Integer.parseInt(userInput);
+		}
+		else {
+			System.out.println("Incorrect input. Try again.\n");
+			return;
+		}
 		
 		if(randomBooksNum > books.size()) {
 			randomBooksNum = books.size();
@@ -80,6 +108,9 @@ public class Manager {
 		}
 	}
 	
+	/**
+	 * Display the information of books by a type of book
+	 */
 	private void displayBooksByType() {
 		System.out.println("#     Type");
 		System.out.println("1     Children's Books");
@@ -87,7 +118,12 @@ public class Manager {
 		System.out.println("3     Paperbacks");
 		System.out.println("4     Periodicals");
 		System.out.print("\nEnter type of book: ");
-		int bookType = in.nextInt();
+		String userInput = in.nextLine().trim();
+		
+		int bookType = 0;
+		if(isDigit(userInput)) {
+			bookType = Integer.parseInt(userInput);
+		}
 		
 		switch (bookType) {
 		case 1:
@@ -106,16 +142,73 @@ public class Manager {
 			System.out.println("Incorrect input. Try again.\n");
 			return;
 		}
-		String category = in.next();
-		searchBooksByCategoryOfType(bookType, category);	
+		
+		userInput = in.nextLine().trim();
+		
+		char category = '\u0000';
+		if((userInput.length() == 1) && Character.isLetter(userInput.charAt(0)) ) {
+			category = userInput.toUpperCase().charAt(0);
+		}
+		else {
+			System.out.println("Incorrect input. Try again.\n");
+			return;
+		}
+		
+		boolean ismatch = false;
+		
+		System.out.println("\nMatching books:");
+		
+		for (Book book : books) {
+			if(book instanceof ChildrensBook && bookType == 1) {
+				ChildrensBook childrensBook = (ChildrensBook)book;
+				if(childrensBook.getFormat() == category) {
+					ismatch = true;
+					System.out.println(book);
+				}
+			}
+			else if(book instanceof Cookbook && bookType == 2) {
+				Cookbook cookbook = (Cookbook)book;
+				// after bookbook object is created
+//				if(cookbook.getFormat() == category) {
+					ismatch = true;
+					System.out.println(book);
+			}
+			else if(book instanceof Paperback && bookType == 3) {
+				Paperback paperback = (Paperback)book;
+				if(paperback.getGenre() == category) {
+					ismatch = true;
+					System.out.println(book);
+				}
+			}
+			else if(book instanceof Periodical && bookType == 4) {	
+				Periodical periodical = (Periodical)book;
+				if(periodical.getFrequency() == category) {
+					ismatch = true;
+					System.out.println(book);
+				}
+			}
+		}
+		
+		//display for any no matching book list
+		if(!ismatch) {
+			System.out.println("Sorry, we can't find any matches.\n");
+		}
 	}
 
 
+	/**
+	 * Display the information of books by a title of book
+	 */
 	private void findBooksByTitle() {
 		Boolean ismatch = false;
 		
 		System.out.print("Enter title to search for: ");
-		String title = in.nextLine();
+		String title = in.nextLine().trim();
+		
+		if(title.isBlank()) {
+			System.out.println("Sorry, incorrect input. Please enter the input.\n");
+			return;
+		}
 		
 		System.out.println("Matching books:");
 		for (Book book : books) {
@@ -125,7 +218,7 @@ public class Manager {
 			}
 		}
 		
-		//display for no any match book list
+		//display for any no matching book list
 		if(!ismatch) {
 			System.out.println("Sorry, we can't find any matches for \"" + title + "\"\n");
 		}
@@ -148,69 +241,55 @@ public class Manager {
 			case '0':
 			case '1':
 				books.add(new ChildrensBook(Long.parseLong(fields[0]), fields[1], Integer.parseInt(fields[2]),
-						Integer.parseInt(fields[3]), fields[4], fields[5], fields[6]));
+						Integer.parseInt(fields[3]), fields[4], fields[5], fields[6].charAt(0)));
 				break;
 			case '2':
 			case '3':
 				// After complete Cookbooks class, enable below code
 				// books.add(new Cookbooks(Long.parseLong(fields[0]), fields[1],
 				// Integer.parseInt(fields[2]), Integer.parseInt(fields[3]), fields[4],
-				// fields[5], fields[6])));
+				// fields[5], fields[6].charAt(0)));
 				break;
 			case '4':
 			case '5':
 			case '6':
 			case '7':
 				books.add(new Paperback(Long.parseLong(fields[0]), fields[1], Integer.parseInt(fields[2]), 
-						Integer.parseInt(fields[3]), fields[4],	fields[5], Integer.parseInt(fields[6]), fields[7]));
+						Integer.parseInt(fields[3]), fields[4],	fields[5], Integer.parseInt(fields[6]), fields[7].charAt(0)));
 				break;
 			case '8':
 			case '9':
 				books.add(new Periodical(Long.parseLong(fields[0]), fields[1], Integer.parseInt(fields[2]), 
-						Integer.parseInt(fields[3]), fields[4],	fields[5]));
+						Integer.parseInt(fields[3]), fields[4],	fields[5].charAt(0)));
 				break;
 			}
 		}
 		in.close();
 	}
 	
-	private void searchBooksByCategoryOfType(int bookType, String category) {
-		Boolean ismatch = false;
-		
-		System.out.println("\nMatching books:");
-		
-		for (Book book : books) {
-			if(book instanceof ChildrensBook && bookType == 1) {
-				ChildrensBook childrensBook = (ChildrensBook)book;
-				if(childrensBook.getFormat().toUpperCase().equals(category)) {
-					ismatch = true;
-					System.out.println(book);
-				}
-			}
-			else if(book instanceof Cookbook && bookType == 2) {
-				Cookbook cookbook = (Cookbook)book;
-				// working after Cookbook class complete
-			}
-			else if(book instanceof Paperback && bookType == 3) {
-				Paperback paperback = (Paperback)book;
-				if(paperback.getGenre().toUpperCase().equals(category)) {
-					ismatch = true;
-					System.out.println(book);
-				}
-			}
-			else if(book instanceof Periodical && bookType == 4) {	
-				Periodical periodical = (Periodical)book;
-				if(periodical.getFrequency().toUpperCase().equals(category)) {
-					ismatch = true;
-					System.out.println(book);
-				}
-			}
-		}
-		
-		//display for no any match book list
-		if(!ismatch) {
-			System.out.println("Sorry, we can't find any matches");
-
-		}
-	}
+	
+	/**
+	 * Validate the input is a digit
+	 * 
+	 * @param input the user input
+	 * @return is Digit or not
+	 */
+    private boolean isDigit(String input) {
+        boolean isDigit = true;
+        
+        if(input.isBlank()) {
+            isDigit = false;
+        }
+        else {
+            for(int i=0; i < input.length(); i++){
+                if(!Character.isDigit(input.charAt(i))) {
+                    isDigit = false;
+                    break;
+                }
+            }   
+        }
+        
+        return isDigit;
+    }
+	
 }
