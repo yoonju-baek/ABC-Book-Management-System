@@ -365,7 +365,7 @@ public class Manager {
 	private boolean isDigit(String input) {
 		boolean isDigit = true;
 
-		if (input.isBlank()) {
+		if (input.length() <= 0) {
 			isDigit = false;
 		} else {
 			for (int i = 0; i < input.length(); i++) {
