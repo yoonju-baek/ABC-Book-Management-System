@@ -169,7 +169,7 @@ public class Manager {
 		System.out.print("Enter title to search for: ");
 		String title = in.nextLine().trim();
 
-		if (title.isBlank()) {
+		if (title.length() <= 0) {
 			System.out.println("Sorry, incorrect input. Please enter the input.\n");
 			return;
 		}
